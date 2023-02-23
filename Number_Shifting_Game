@@ -69,15 +69,16 @@ int Usekey(int arr[][4], char key)
 }
 int check_win_condition(int arr[][4])
 {
-    int count = 1;
+    int count = 0;
     int i, j;
     for (i = 0; i < 4; i++)
     {
         for (j = 0; j < 4; j++)
         {
             count++;
-            if (arr[i][j] != count)
-                return 0;
+            if (arr[i][j] != count && count!=16){
+            return 0;
+            }
         }
     }
     return 1;
@@ -112,7 +113,7 @@ void display(int arr[][4], int totalMoves, char name[])
         printf("\n");
         SetConsoleTextAttribute(h,l=l+1);
     }
-    printf("---------------------\n");
+    printf("---------------------\n\n\n");
 }
 int check_exist(int arr[][4], int randome)
 {
@@ -200,7 +201,7 @@ int menu()
 }
 int main()
 {
-    int totalMoves = 11, flag = 1;
+    int totalMoves = 1000, flag = 1;
     char arrowKey,opt;
     int randomeNum[4][4];
     char name[30];
@@ -217,16 +218,22 @@ int main()
         {
             if(k>0)
             totalMoves--;
+            enter:
             display(randomeNum, totalMoves, name);
             arrowKey = getch();
             if(arrowKey=='e'||arrowKey=='E'){
-            printf("\n Press any key to exit the game...");
+                printf("Game exit by the player\n");
             exit(0);
             }
             else{
                 arrowKey=getch();
-             if (!Usekey(randomeNum, arrowKey))
-                exit(0);
+             if (!Usekey(randomeNum, arrowKey)){
+                 printf("Invalid option !");
+            fflush(stdin);
+            sleep(1);
+            system("cls");
+            goto enter;
+             }
              if (check_win_condition(randomeNum))
             {
                 flag = 0;
@@ -236,13 +243,14 @@ int main()
         }
         if (flag){
              SetConsoleTextAttribute(h,8);
-            printf("\n\tYou Lose!\n\n");
+            printf("\n\t%s You Lose!\n\n",name);
+            printf("%d",flag);
         }
         else{
-             SetConsoleTextAttribute(h,12);
-            printf("You Won!");
+            SetConsoleTextAttribute(h,12);
+            printf("%s You Won!",name);   
         }
-         SetConsoleTextAttribute(h,11);
+        SetConsoleTextAttribute(h,11);
         printf("\n Do you want to play Again! \nPress 'y' to play again otherwise Press any key:  ");
         fflush(stdin);
         opt=getch();
@@ -268,7 +276,7 @@ int main()
     {
         system("cls");
          SetConsoleTextAttribute(h,13);
-        printf("\n %cYou press any other key so game is end thnx for playing!%c",2,2);
+        printf("\n %cYou press E,e or any other key so game is end thnx for playing!%c",2,2);
         printf("\n\n %cWhen you like the game visit again!%c",3,3);
         sleep(2);
         exit(0);
